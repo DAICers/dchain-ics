@@ -1,0 +1,12 @@
+syntax = "proto3";
+package dchain.whiteboard;
+
+option go_package = "dchain/x/whiteboard/types";
+
+message WhiteboardPixelMap {
+  uint64 whiteboardId = 1; 
+  uint64 index = 2; 
+  uint64 whiteboardPixelId = 3; 
+  
+}
+

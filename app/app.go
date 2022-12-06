@@ -88,16 +88,16 @@ import (
 	tmos "github.com/tendermint/tendermint/libs/os"
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/strangelove-ventures/hero/cmd"
-	tokenfactorymodule "github.com/strangelove-ventures/hero/x/tokenfactory"
-	tokenfactorymodulekeeper "github.com/strangelove-ventures/hero/x/tokenfactory/keeper"
-	tokenfactorymoduletypes "github.com/strangelove-ventures/hero/x/tokenfactory/types"
+	"github.com/DAICers/dchain-ics/cmd"
+	whiteboardmodule "github.com/DAICers/dchain-ics/x/whiteboard"
+	whiteboardmodulekeeper "github.com/DAICers/dchain-ics/x/whiteboard/keeper"
+	whiteboardmoduletypes "github.com/DAICers/dchain-ics/x/whiteboard/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
 const (
 	AccountAddressPrefix = "cosmos"
-	Name                 = "hero"
+	Name                 = "dchain"
 )
 
 // this line is used by starport scaffolding # stargate/wasm/app/enabledProposals
@@ -139,8 +139,7 @@ var (
 				upgraderest.ProposalCancelRESTHandler,
 			),
 		),
-		tokenfactorymodule.AppModuleBasic{},
-		// this line is used by starport scaffolding # stargate/app/moduleBasic
+		whiteboardmodule.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -150,8 +149,7 @@ var (
 		ibctransfertypes.ModuleName:                   {authtypes.Minter, authtypes.Burner},
 		ccvconsumertypes.ConsumerRedistributeName:     nil,
 		ccvconsumertypes.ConsumerToSendToProviderName: nil,
-		tokenfactorymoduletypes.ModuleName:            {authtypes.Minter, authtypes.Burner, authtypes.Staking},
-		// this line is used by starport scaffolding # stargate/app/maccPerms
+		whiteboardmoduletypes.ModuleName:              nil,
 	}
 )
 
@@ -210,8 +208,7 @@ type App struct {
 	ScopedICAHostKeeper     capabilitykeeper.ScopedKeeper
 	ScopedCCVConsumerKeeper capabilitykeeper.ScopedKeeper
 
-	TokenfactoryKeeper tokenfactorymodulekeeper.Keeper
-	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
+	WhiteboardKeeper whiteboardmodulekeeper.Keeper
 
 	// mm is the module manager
 	mm *module.Manager
@@ -247,8 +244,7 @@ func New(
 		authtypes.StoreKey, authz.ModuleName, banktypes.StoreKey, slashingtypes.StoreKey,
 		paramstypes.StoreKey, ibchost.StoreKey, upgradetypes.StoreKey, feegrant.StoreKey, evidencetypes.StoreKey,
 		ibctransfertypes.StoreKey, icahosttypes.StoreKey, capabilitytypes.StoreKey, ccvconsumertypes.StoreKey,
-		adminmodulemoduletypes.StoreKey, tokenfactorymoduletypes.StoreKey,
-		// this line is used by starport scaffolding # stargate/app/storeKey
+		adminmodulemoduletypes.StoreKey, whiteboardmoduletypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -366,7 +362,7 @@ func New(
 	var transferStack ibcporttypes.IBCModule
 	transferModule := transfer.NewAppModule(app.TransferKeeper)
 	transferStack = transfer.NewIBCModule(app.TransferKeeper)
-	transferStack = tokenfactorymodule.NewIBCMiddleware(transferStack, app.TokenfactoryKeeper)
+	transferStack = whiteboardmodule.NewIBCMiddleware(transferStack, app.WhiteboardKeeper)
 
 	app.ICAHostKeeper = icahostkeeper.NewKeeper(
 		appCodec, keys[icahosttypes.StoreKey],
@@ -425,17 +421,15 @@ func New(
 	)
 	adminModule := adminmodulemodule.NewAppModule(appCodec, app.AdminmoduleKeeper)
 
-	app.TokenfactoryKeeper = *tokenfactorymodulekeeper.NewKeeper(
+	app.WhiteboardKeeper = *whiteboardmodulekeeper.NewKeeper(
 		appCodec,
-		keys[tokenfactorymoduletypes.StoreKey],
-		keys[tokenfactorymoduletypes.MemStoreKey],
-		app.GetSubspace(tokenfactorymoduletypes.ModuleName),
-
+		keys[whiteboardmoduletypes.StoreKey],
+		keys[whiteboardmoduletypes.MemStoreKey],
+		app.GetSubspace(whiteboardmoduletypes.ModuleName),
+		app.AccountKeeper,
 		app.BankKeeper,
 	)
-	tokenfactoryModule := tokenfactorymodule.NewAppModule(appCodec, app.TokenfactoryKeeper, app.AccountKeeper, app.BankKeeper)
-
-	// this line is used by starport scaffolding # stargate/app/keeperDefinition
+	whiteboardModule := whiteboardmodule.NewAppModule(appCodec, app.WhiteboardKeeper, app.AccountKeeper, app.BankKeeper)
 
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := ibcporttypes.NewRouter()
@@ -471,8 +465,7 @@ func New(
 		icaModule,
 		consumerModule,
 		adminModule,
-		tokenfactoryModule,
-		// this line is used by starport scaffolding # stargate/app/appModule
+		whiteboardModule,
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -497,8 +490,7 @@ func New(
 		vestingtypes.ModuleName,
 		ccvconsumertypes.ModuleName,
 		adminmodulemoduletypes.ModuleName,
-		tokenfactorymoduletypes.ModuleName,
-		// this line is used by starport scaffolding # stargate/app/beginBlockers
+		whiteboardmoduletypes.ModuleName,
 	)
 
 	app.mm.SetOrderEndBlockers(
@@ -518,8 +510,7 @@ func New(
 		vestingtypes.ModuleName,
 		ccvconsumertypes.ModuleName,
 		adminmodulemoduletypes.ModuleName,
-		tokenfactorymoduletypes.ModuleName,
-		// this line is used by starport scaffolding # stargate/app/endBlockers
+		whiteboardmoduletypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -544,8 +535,7 @@ func New(
 		vestingtypes.ModuleName,
 		ccvconsumertypes.ModuleName,
 		adminmodulemoduletypes.ModuleName,
-		tokenfactorymoduletypes.ModuleName,
-		// this line is used by starport scaffolding # stargate/app/initGenesis
+		whiteboardmoduletypes.ModuleName,
 	)
 
 	// Uncomment if you want to set a custom migration order here.
@@ -569,8 +559,7 @@ func New(
 		evidence.NewAppModule(app.EvidenceKeeper),
 		ibc.NewAppModule(app.IBCKeeper),
 		transferModule,
-		tokenfactoryModule,
-		// this line is used by starport scaffolding # stargate/app/appModule
+		whiteboardModule,
 	)
 	app.sm.RegisterStoreDecoders()
 
@@ -592,9 +581,9 @@ func New(
 				SignModeHandler: encodingConfig.TxConfig.SignModeHandler(),
 				SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
 			},
-			tokenfactorykeeper: app.TokenfactoryKeeper,
-			IBCKeeper:          app.IBCKeeper,
-			ConsumerKeeper:     app.ConsumerKeeper,
+			whiteboardkeeper: app.WhiteboardKeeper,
+			IBCKeeper:        app.IBCKeeper,
+			ConsumerKeeper:   app.ConsumerKeeper,
 		},
 	)
 	if err != nil {
@@ -766,8 +755,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(ibchost.ModuleName)
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 	paramsKeeper.Subspace(ccvconsumertypes.ModuleName)
-	paramsKeeper.Subspace(tokenfactorymoduletypes.ModuleName)
-	// this line is used by starport scaffolding # stargate/app/paramSubspace
+	paramsKeeper.Subspace(whiteboardmoduletypes.ModuleName)
 
 	return paramsKeeper
 }

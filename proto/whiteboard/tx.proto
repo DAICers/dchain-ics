@@ -1,0 +1,58 @@
+syntax = "proto3";
+package dchain.whiteboard;
+
+// this line is used by starport scaffolding # proto/tx/import
+
+option go_package = "dchain/x/whiteboard/types";
+
+// Msg defines the Msg service.
+service Msg {
+      rpc CreateWhiteboard(MsgCreateWhiteboard) returns (MsgCreateWhiteboardResponse);
+  rpc LockWhiteboard(MsgLockWhiteboard) returns (MsgLockWhiteboardResponse);
+  rpc UnlockWhiteboard(MsgUnlockWhiteboard) returns (MsgUnlockWhiteboardResponse);
+  rpc SetWhiteboardPixelColor(MsgSetWhiteboardPixelColor) returns (MsgSetWhiteboardPixelColorResponse);
+// this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgCreateWhiteboard {
+  string creator = 1;
+  string name = 2;
+  string description = 3;
+  uint64 xSize = 4;
+  uint64 ySize = 5;
+  bool isLocked = 6;
+}
+
+message MsgCreateWhiteboardResponse {
+}
+
+message MsgLockWhiteboard {
+  string creator = 1;
+  uint64 whiteboardId = 2;
+}
+
+message MsgLockWhiteboardResponse {
+}
+
+message MsgUnlockWhiteboard {
+  string creator = 1;
+  uint64 whiteboardId = 2;
+}
+
+message MsgUnlockWhiteboardResponse {
+}
+
+message MsgSetWhiteboardPixelColor {
+  string creator = 1;
+  uint64 whiteboardId = 2;
+  uint64 x = 3;
+  uint64 y = 4;
+  uint64 r = 5;
+  uint64 g = 6;
+  uint64 b = 7;
+}
+
+message MsgSetWhiteboardPixelColorResponse {
+}
+
+// this line is used by starport scaffolding # proto/tx/message

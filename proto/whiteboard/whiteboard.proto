@@ -1,0 +1,15 @@
+syntax = "proto3";
+package dchain.whiteboard;
+
+option go_package = "dchain/x/whiteboard/types";
+
+message Whiteboard {
+  uint64 id = 1;
+  string name = 2; 
+  string description = 3; 
+  string owner = 4; 
+  uint64 xSize = 5; 
+  uint64 ySize = 6; 
+  bool isLocked = 7; 
+  
+}

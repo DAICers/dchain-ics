@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/strangelove-ventures/hero/app"
-	"github.com/strangelove-ventures/hero/cmd"
+	"github.com/DAICers/dchain-ics/app"
+	"github.com/DAICers/dchain-ics/cmd"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/codec"

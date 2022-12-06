@@ -1,0 +1,14 @@
+syntax = "proto3";
+package dchain.whiteboard;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "dchain/x/whiteboard/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  
+  uint64 maxXSize = 1 [(gogoproto.moretags) = "yaml:\"max_x_size\""];
+  uint64 maxYSize = 2 [(gogoproto.moretags) = "yaml:\"max_y_size\""];
+}

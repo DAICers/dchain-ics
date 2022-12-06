@@ -19,15 +19,15 @@ import (
 	tmrand "github.com/tendermint/tendermint/libs/rand"
 	tmdb "github.com/tendermint/tm-db"
 
+	"github.com/DAICers/dchain-ics/app"
+	"github.com/DAICers/dchain-ics/cmd"
+	"github.com/DAICers/dchain-ics/testutil"
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	genutil "github.com/cosmos/cosmos-sdk/x/genutil"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	ccvconsumertypes "github.com/cosmos/interchain-security/x/ccv/consumer/types"
-	"github.com/strangelove-ventures/hero/app"
-	"github.com/strangelove-ventures/hero/cmd"
-	"github.com/strangelove-ventures/hero/testutil"
 	types1 "github.com/tendermint/tendermint/abci/types"
 	tmtypes "github.com/tendermint/tendermint/types"
 )
@@ -85,7 +85,7 @@ func DefaultConfig() network.Config {
 		GenesisState:  app.ModuleBasics.DefaultGenesis(encoding.Marshaler),
 		TimeoutCommit: 2 * time.Second,
 		ChainID:       "chain-" + tmrand.NewRand().Str(6),
-		// Some changes are introduced to make the tests run as if Hero is a standalone chain.
+		// Some changes are introduced to make the tests run as if chain is a standalone chain.
 		// This will only work if NumValidators is set to 1.
 		NumValidators:   1,
 		BondDenom:       sdk.DefaultBondDenom,

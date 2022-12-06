@@ -4,14 +4,14 @@ import (
 	"encoding/json"
 	"testing"
 
+	appConsumer "github.com/DAICers/dchain-ics/app"
+	"github.com/DAICers/dchain-ics/cmd"
 	"github.com/cosmos/cosmos-sdk/simapp"
 	ibctesting "github.com/cosmos/ibc-go/v3/testing"
 	appProvider "github.com/cosmos/interchain-security/app/provider"
 	"github.com/cosmos/interchain-security/tests/e2e"
 	e2etestutil "github.com/cosmos/interchain-security/testutil/e2e"
 	icssimapp "github.com/cosmos/interchain-security/testutil/simapp"
-	appConsumer "github.com/strangelove-ventures/hero/app"
-	"github.com/strangelove-ventures/hero/cmd"
 	"github.com/stretchr/testify/suite"
 	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
@@ -37,7 +37,7 @@ func TestCCVTestSuite(t *testing.T) {
 	suite.Run(t, ccvSuite)
 }
 
-// NewCoordinator initializes Coordinator with interchain security dummy provider and hero consumer chain
+// NewCoordinator initializes Coordinator with interchain security dummy provider and dchain consumer chain
 func NewProviderConsumerCoordinator(t *testing.T) (*ibctesting.Coordinator, *ibctesting.TestChain, *ibctesting.TestChain) {
 	coordinator := icssimapp.NewBasicCoordinator(t)
 	chainID := ibctesting.GetChainID(1)

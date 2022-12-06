@@ -11,14 +11,14 @@ import (
 )
 
 // This function creates consumer module genesis state that is used as starting point for modifications
-// that allow Hero chain to be started locally without having to start the provider chain and the relayer.
+// that allow dchain chain to be started locally without having to start the provider chain and the relayer.
 // It is also used in tests that are starting the chain node.
 func CreateMinimalConsumerTestGenesis() *ccvconsumertypes.GenesisState {
 	genesisState := ccvconsumertypes.DefaultGenesisState()
 	genesisState.Params.Enabled = true
 	genesisState.NewChain = true
 	genesisState.ProviderClientState = ccvprovidertypes.DefaultParams().TemplateClient
-	genesisState.ProviderClientState.ChainId = "hero"
+	genesisState.ProviderClientState.ChainId = "dchain"
 	genesisState.ProviderClientState.LatestHeight = ibctypes.Height{RevisionNumber: 0, RevisionHeight: 1}
 	genesisState.ProviderClientState.TrustingPeriod = genesisState.Params.UnbondingPeriod / ccvprovidertypes.DefaultTrustingPeriodFraction
 	genesisState.ProviderClientState.UnbondingPeriod = genesisState.Params.UnbondingPeriod

@@ -1,0 +1,131 @@
+syntax = "proto3";
+package dchain.whiteboard;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "dchain/whiteboard/params.proto";
+import "dchain/whiteboard/whiteboard_pixel.proto";
+import "dchain/whiteboard/whiteboard.proto";
+import "dchain/whiteboard/whiteboard_pixel_map.proto";
+// this line is used by starport scaffolding # 1
+
+option go_package = "dchain/x/whiteboard/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/dchain/whiteboard/params";
+  }
+  // Queries a WhiteboardPixel by id.
+	rpc WhiteboardPixel(QueryGetWhiteboardPixelRequest) returns (QueryGetWhiteboardPixelResponse) {
+		option (google.api.http).get = "/dchain/whiteboard/whiteboard_pixel/{id}";
+	}
+
+	// Queries a list of WhiteboardPixel items.
+	rpc WhiteboardPixelAll(QueryAllWhiteboardPixelRequest) returns (QueryAllWhiteboardPixelResponse) {
+		option (google.api.http).get = "/dchain/whiteboard/whiteboard_pixel";
+	}
+
+// Queries a Whiteboard by id.
+	rpc Whiteboard(QueryGetWhiteboardRequest) returns (QueryGetWhiteboardResponse) {
+		option (google.api.http).get = "/dchain/whiteboard/whiteboard/{id}";
+	}
+
+	// Queries a list of Whiteboard items.
+	rpc WhiteboardAll(QueryAllWhiteboardRequest) returns (QueryAllWhiteboardResponse) {
+		option (google.api.http).get = "/dchain/whiteboard/whiteboard";
+	}
+
+// Queries a WhiteboardPixelMap by index.
+	rpc WhiteboardPixelMap(QueryGetWhiteboardPixelMapRequest) returns (QueryGetWhiteboardPixelMapResponse) {
+		option (google.api.http).get = "/dchain/whiteboard/whiteboard_pixel_map/{whiteboardId}/{index}";
+	}
+
+	// Queries a list of WhiteboardPixelMap items.
+	rpc WhiteboardPixelMapAll(QueryAllWhiteboardPixelMapRequest) returns (QueryAllWhiteboardPixelMapResponse) {
+		option (google.api.http).get = "/dchain/whiteboard/whiteboard_pixel_map";
+	}
+
+// Queries a list of GetWhiteboardPixelStates items.
+	rpc GetWhiteboardPixelStates(QueryGetWhiteboardPixelStatesRequest) returns (QueryGetWhiteboardPixelStatesResponse) {
+		option (google.api.http).get = "/dchain/whiteboard/get_whiteboard_pixel_states/{whiteboardId}";
+	}
+
+// this line is used by starport scaffolding # 2
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetWhiteboardPixelRequest {
+	uint64 id = 1;
+}
+
+message QueryGetWhiteboardPixelResponse {
+	WhiteboardPixel WhiteboardPixel = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllWhiteboardPixelRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllWhiteboardPixelResponse {
+	repeated WhiteboardPixel WhiteboardPixel = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetWhiteboardRequest {
+	uint64 id = 1;
+}
+
+message QueryGetWhiteboardResponse {
+	Whiteboard Whiteboard = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllWhiteboardRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllWhiteboardResponse {
+	repeated Whiteboard Whiteboard = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetWhiteboardPixelMapRequest {
+	  uint64 whiteboardId = 1;
+  uint64 index = 2;
+
+}
+
+message QueryGetWhiteboardPixelMapResponse {
+	WhiteboardPixelMap whiteboardPixelMap = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllWhiteboardPixelMapRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllWhiteboardPixelMapResponse {
+	repeated WhiteboardPixelMap whiteboardPixelMap = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetWhiteboardPixelStatesRequest {
+	uint64 whiteboardId = 1;
+	cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryGetWhiteboardPixelStatesResponse {
+	repeated WhiteboardPixel pixels = 1;
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// this line is used by starport scaffolding # 3

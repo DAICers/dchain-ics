@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/DAICers/dchain-ics/app"
+	"github.com/DAICers/dchain-ics/cmd"
 	"github.com/cosmos/cosmos-sdk/simapp"
 	ibctesting "github.com/cosmos/ibc-go/v3/testing"
 	icssimapp "github.com/cosmos/interchain-security/testutil/simapp"
-	"github.com/strangelove-ventures/hero/app"
-	"github.com/strangelove-ventures/hero/cmd"
 	"github.com/stretchr/testify/require"
 	"github.com/tendermint/tendermint/libs/log"
 	tmdb "github.com/tendermint/tm-db"

@@ -1,0 +1,22 @@
+syntax = "proto3";
+package dchain.whiteboard;
+
+import "gogoproto/gogo.proto";
+import "dchain/whiteboard/params.proto";
+import "dchain/whiteboard/whiteboard_pixel.proto";
+import "dchain/whiteboard/whiteboard.proto";
+import "dchain/whiteboard/whiteboard_pixel_map.proto";
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "dchain/x/whiteboard/types";
+
+// GenesisState defines the whiteboard module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  repeated WhiteboardPixel whiteboardPixelList = 2 [(gogoproto.nullable) = false];
+  uint64 whiteboardPixelCount = 3;
+  repeated Whiteboard whiteboardList = 4 [(gogoproto.nullable) = false];
+  uint64 whiteboardCount = 5;
+  repeated WhiteboardPixelMap whiteboardPixelMapList = 6 [(gogoproto.nullable) = false];
+  // this line is used by starport scaffolding # genesis/proto/state
+}

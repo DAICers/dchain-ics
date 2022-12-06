@@ -12,8 +12,8 @@ ifeq (,$(VERSION))
   endif
 endif
 
-CHAIN_NAME = hero
-DAEMON_NAME = herod
+CHAIN_NAME = dchain
+DAEMON_NAME = dchaind
 
 LEDGER_ENABLED ?= true
 TM_VERSION := $(shell go list -m github.com/tendermint/tendermint | sed 's:.* ::') # grab everything after the space in "github.com/tendermint/tendermint v0.34.7"
@@ -109,3 +109,26 @@ lint:
 
 .PHONY: all build-linux install lint \
 	go-mod-cache build \
+
+  ###############################################################################
+###                              Documentation                              ###
+###############################################################################
+
+update-swagger-docs: statik
+	$(BINDIR)/statik -src=client/docs/swagger-ui -dest=client/docs -f -m
+	@if [ -n "$(git status --porcelain)" ]; then \
+        echo "\033[91mSwagger docs are out of sync!!!\033[0m";\
+        exit 1;\
+    else \
+        echo "\033[92mSwagger docs are in sync\033[0m";\
+    fi
+.PHONY: update-swagger-docs
+
+godocs:
+	@echo "--> Wait a few seconds and visit http://localhost:6060/pkg/github.com/cosmos/cosmos-sdk/types"
+	godoc -http=:6060
+
+build-docs:
+	@cd docs && DOCS_DOMAIN=docs.cosmos.network sh ./build-all.sh
+
+.PHONY: build-docs
