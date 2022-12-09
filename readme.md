@@ -36,20 +36,6 @@ Available Commands:
 
 ```
 
-
-## Create a NFT collection
-
-```
-Use:   "create-collection [name] [description] [ticker] [uri] [uri-hash] [data]"
-Short: "Create a new collection"
-```
-
-## Create new NFT within a collection
-
-```
-Use:   "create-nft [collection-id] [uri] [uri-hash] [data]"
-Short: "Create a new nft"
-``` 
  
 ## Launch with genesis file or run as standalone chain
 
